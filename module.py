@@ -17,7 +17,9 @@
 
 """ Module """
 from pylon.core.tools import log  # pylint: disable=E0611,E0401
-from pylon.core.tools import module  # pylint: disable=E0611,E0401
+from pylon.core.tools import module
+
+from ..integrations.models.integration import IntegrationAdmin  # pylint: disable=E0611,E0401
 
 from .models.integration_pd import IntegrationModel
 
@@ -65,6 +67,35 @@ class Module(module.ModuleModel):
         #     security_test_create_integration_validate,
         #     name=f'security_test_create_integration_validate_{self.descriptor.name}',
         # )
+
+        if not IntegrationAdmin.query.filter(IntegrationAdmin.id == 1).one_or_none():
+            self._create_base_s3_integration()
+
+    def _create_base_s3_integration(self):
+        integration_args = {
+            "id": 1,
+            "name": "s3_integration",
+            "settings": {
+                "access_key": c.MINIO_ACCESS,
+                "secret_access_key": {
+                    "from_secrets": False,
+                    "value": c.MINIO_SECRET
+                },
+                "region_name": c.MINIO_REGION,
+                "use_compatible_storage": True,
+                "storage_url": c.MINIO_ENDPOINT
+            },
+            "is_default": True,
+            "section": "system",
+            "config": {
+                "is_shared": True,
+                "name": "Carrier Minio"
+            },
+            "status": "success"
+        }
+        integration = IntegrationAdmin(**integration_args)
+        integration.insert()
+        log.info('Integration created: [id: %s, name: %s]', integration.id, integration.name)
 
     def deinit(self):  # pylint: disable=R0201
         """ De-init module """
