@@ -74,7 +74,6 @@ class Module(module.ModuleModel):
 
     def _create_base_s3_integration(self):
         integration_args = {
-            "id": 1,
             "name": "s3_integration",
             "settings": {
                 "access_key": c.MINIO_ACCESS,

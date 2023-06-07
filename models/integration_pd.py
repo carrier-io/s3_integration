@@ -3,7 +3,6 @@ from pydantic import BaseModel, validator
 from urllib.parse import urlparse
 import boto3
 
-from tools import session_project
 from ...integrations.models.pd.integration import SecretField
 from pylon.core.tools import log
 
@@ -24,6 +23,7 @@ class IntegrationModel(BaseModel):
         return value
 
     def check_connection(self) -> bool:
+        from tools import session_project
         secret_access_key = self.secret_access_key.unsecret(session_project.get())
         aws_kwargs = {
             'aws_access_key_id': self.access_key,
