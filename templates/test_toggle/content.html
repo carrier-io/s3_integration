@@ -1,0 +1,25 @@
+{% set instance_name_prefix = instance_name_prefix | default('') %}
+{% set integration_name = 's3_integration' %}
+{% set display_name = 'S3 Storage' %}
+
+<Test-Integration-Item
+    integration_name="{{ '%s%s' | format(instance_name_prefix, integration_name) }}"
+    display_name="{{ display_name }}"
+    :project_integrations="{{ project_integrations | list_pd_to_json }}"
+>
+    <template #selector="{selected_integration, is_selected, on_set_data, on_clear_data, integration_data}">
+        <s3-integration-toggle
+            @register="register"
+            instance_name="{{ '%s%s' | format(instance_name_prefix, integration_name) }}"
+            section="system"
+
+            @set_data="on_set_data"
+            @clear_data="on_clear_data"
+
+            :selected_integration="selected_integration"
+            :is_selected="is_selected"
+            :integration_data="integration_data"
+        ></s3-integration-toggle>
+    </template>
+</Test-Integration-Item>
+

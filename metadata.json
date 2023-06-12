@@ -1,0 +1,8 @@
+{
+  "name": "Carrier S3 Storage Plugin",
+  "version": "0.2",
+  "module": "plugins.s3_integration",
+  "extract": false,
+  "depends_on": ["integrations"],
+  "init_after": []
+}
