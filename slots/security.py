@@ -2,8 +2,8 @@ from pylon.core.tools import log, web
 
 
 class Slot:
-    integration_name = 'reporter_jira'
-    section_name = 'reporters'
+    integration_name = 's3_integration'
+    section_name = 'system'
 
     @web.slot(f'security_{section_name}_content')
     def toggle_content(self, context, slot, payload):
