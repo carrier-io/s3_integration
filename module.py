@@ -83,7 +83,7 @@ class Module(module.ModuleModel):
                 },
                 "region_name": c.MINIO_REGION,
                 "use_compatible_storage": True,
-                "storage_url": c.MINIO_ENDPOINT
+                "storage_url": c.MINIO_URL
             },
             "is_default": True,
             "section": "system",
