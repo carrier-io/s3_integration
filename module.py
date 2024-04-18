@@ -19,7 +19,7 @@
 from pylon.core.tools import log  # pylint: disable=E0611,E0401
 from pylon.core.tools import module
 
-from tools import constants as c
+from tools import constants as c, db
 
 from ..integrations.models.integration import IntegrationAdmin  # pylint: disable=E0611,E0401
 from .models.integration_pd import IntegrationModel
@@ -94,7 +94,8 @@ class Module(module.ModuleModel):
             "status": "success"
         }
         integration = IntegrationAdmin(**integration_args)
-        integration.insert()
+        with db.get_session() as session:
+            integration.insert(session)
         log.info('Integration created: [id: %s, name: %s]', integration.id, integration.name)
 
     def deinit(self):  # pylint: disable=R0201
