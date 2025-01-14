@@ -19,7 +19,7 @@
 from pylon.core.tools import log  # pylint: disable=E0611,E0401
 from pylon.core.tools import module
 
-from tools import constants as c, db
+from tools import constants as c
 
 from ..integrations.models.integration import IntegrationAdmin  # pylint: disable=E0611,E0401
 from .models.integration_pd import IntegrationModel
@@ -68,11 +68,11 @@ class Module(module.ModuleModel):
         #     security_test_create_integration_validate,
         #     name=f'security_test_create_integration_validate_{self.descriptor.name}',
         # )
-        with db.get_session() as session:
-            if not session.query(IntegrationAdmin).where(IntegrationAdmin.id == 1).first():
-                self._create_base_s3_integration(session)
 
-    def _create_base_s3_integration(self, session):
+        if not IntegrationAdmin.query.filter(IntegrationAdmin.id == 1).one_or_none():
+            self._create_base_s3_integration()
+
+    def _create_base_s3_integration(self):
         integration_args = {
             "name": "s3_integration",
             "settings": {
@@ -94,7 +94,7 @@ class Module(module.ModuleModel):
             "status": "success"
         }
         integration = IntegrationAdmin(**integration_args)
-        integration.insert(session)
+        integration.insert()
         log.info('Integration created: [id: %s, name: %s]', integration.id, integration.name)
 
     def deinit(self):  # pylint: disable=R0201
